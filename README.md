@@ -1,7 +1,7 @@
 # Proposal
 ## Type Racer for Android
-###### Bas Zwanenburg
-###### 11980370
+Bas Zwanenburg
+11980370
 
 ## Problem Statement
 De smartphone is een nog relatief nieuwe technologie. De laatste paar jaar is het apparaat ook steeds populairder geworden bij de ouderen. Deze mensen, die niet zijn opgegroeid met computers en er nooit mee hebben gewerkt, hebben vaak veel moeite met typen. Ze hebben echter niet de mogelijkheid om hier wat aan te doen. De bedoeling is dat gebruikers met deze app op een leuke manier kunnen oefenen en zo hun typvaardigheid vanzelf verbeteren. Uiteraard is dit niet alleen bedoeld voor ouderen, maar voor iedereen die verlangt om sneller te typen.
@@ -10,7 +10,7 @@ De smartphone is een nog relatief nieuwe technologie. De laatste paar jaar is he
 De app is in feite een spelletje, waarbij de gebruiker een willekeurig stuk tekst zo snel mogelijk foutloos dient over te typen om een zo hoog mogelijke score te behalen. Met behulp van een autootje als visualisatie wordt de progressie van de gebruiker weergegeven. De stukjes tekst worden opgehaald met behulp van JSON API van een film database, waarbij de beschrijving van een willekeurige film als prompt wordt gebruikt.
 
 ## Visual Sketch
-![Sketches](/docs/Sketch.png)
+![Sketches](/docs/Sketches.png)
 Schetsen ter concept. De Minimum Viable Project bestaat uit alle blauwe componenten. De rode componenten zijn optioneel en worden alleen geïmplementeerd als dat daadwerkelijk haalbaar is. 
 
 ### Main Features
