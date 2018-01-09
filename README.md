@@ -1,5 +1,4 @@
-# Proposal
-## Type Racer for Android
+# Proposal: Type Racer for Android
 Bas Zwanenburg
 11980370
 
