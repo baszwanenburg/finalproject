@@ -8,6 +8,7 @@ In deze gedetailleerde tekening wordt aangegeven welke schermen en onderdelen me
 ## Utility modules
 De volgende modules dienen in ieder geval worden gebruikt:
 ![Moduli](/docs/Moduli.png)
+De haakjes () geven operaties aan. De classes hebben attributen, de rest zijn een utility modulus.
 
 ## API's, frameworks and data sources
 - TheMovieDataBase: Uit deze database worden 100 films afgelezen en de titel, cover, regisseur, jaartal en vooral de beschrijving opgehaald.
