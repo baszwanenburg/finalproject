@@ -9,7 +9,7 @@ De smartphone is een nog relatief nieuwe technologie. De laatste paar jaar is he
 De app is in feite een spelletje, waarbij de gebruiker een willekeurig stuk tekst zo snel mogelijk foutloos dient over te typen om een zo hoog mogelijke score te behalen. Met behulp van een autootje als visualisatie wordt de progressie van de gebruiker weergegeven. De stukjes tekst worden opgehaald met behulp van JSON API van een film database, waarbij de beschrijving van een willekeurige film als prompt wordt gebruikt.
 
 ## Visual Sketch
-![Sketches](/docs/Sketches.png)
+![Sketch](/docs/Sketch.png)
 Schetsen ter concept. De rode componenten zijn optioneel en worden alleen geïmplementeerd als dat daadwerkelijk haalbaar is. De Minimum Viable Project bestaat uit de volgende componenten:
 - LoginRegister om gebruikers gebruik te laten maken van Firebase
 - Vergelijken van EditText en TextView
