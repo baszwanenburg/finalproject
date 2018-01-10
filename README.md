@@ -10,7 +10,12 @@ De app is in feite een spelletje, waarbij de gebruiker een willekeurig stuk teks
 
 ## Visual Sketch
 ![Sketches](/docs/Sketches.png)
-Schetsen ter concept. De Minimum Viable Project bestaat uit alle blauwe componenten. De rode componenten zijn optioneel en worden alleen geïmplementeerd als dat daadwerkelijk haalbaar is. 
+Schetsen ter concept. De rode componenten zijn optioneel en worden alleen geïmplementeerd als dat daadwerkelijk haalbaar is. De Minimum Viable Project bestaat uit de volgende componenten:
+- LoginRegister om gebruikers gebruik te laten maken van Firebase
+- Vergelijken van EditText en TextView
+- Inladen van data uit de film database
+- Toepassen van een stopwatch timer
+- High score van de gebruiker opslaan (en vervangen)
 
 ### Main Features
 - Gebruikers kunnen registeren en inloggen met Firebase, of kunnen gebruikmaken van de app met behulp van een gastaccount
