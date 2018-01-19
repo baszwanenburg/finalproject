@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Programmeerproject: Type Racer</string>
+    <string name="app_name">Type Racer</string>
+    <string name="dummy_text">test 123</string>
 </resources>

@@ -68,12 +68,12 @@
                 android:textSize="10sp"/>
 
             <TextView
-                android:id="@+id/trackView"
+                android:id="@+id/overView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares to do battle with the First Order."
                 android:textColor="@color/colorWhite"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/reView"
@@ -88,20 +88,22 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/timeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
-        android:textColor="@color/color4"
+        android:textColor="@color/colorGreen"
         android:textSize="12sp"
-        android:text="Your time: 00:33.62"/>
+        android:text="Your time: 00:00.00"/>
 
     <TextView
+        android:id="@+id/speedView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
-        android:textColor="@color/color4"
+        android:textColor="@color/colorGreen"
         android:textSize="12sp"
-        android:text="Your speed: 57 WPM"/>
+        android:text="Your speed: 0 WPM"/>
 
     <LinearLayout
         android:layout_width="match_parent"

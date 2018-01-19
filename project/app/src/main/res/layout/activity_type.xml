@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,229 +7,270 @@
     android:background="@color/colorBackground"
     tools:context="com.example.bas.project.ActivityType">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_height="match_parent"
+    <!-- Player 1 -->
+    <RelativeLayout
+        android:id="@+id/rl_1"
         android:layout_width="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal">
 
-        <!-- Player 1 -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:orientation="horizontal">
+        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+            android:id="@+id/progress_1"
+            android:layout_width="300dp"
+            android:layout_height="15dp"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@id/wpm_1"
+            app:rcBackgroundColor="@color/colorBGdark"
+            app:rcBackgroundPadding="0dp"
+            app:rcMax="1"
+            app:rcProgress="0"
+            app:rcProgressColor="@color/color1"
+            app:rcRadius="5dp"
+            app:rcReverse="false" />
 
-            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-                android:id="@+id/progress_1"
-                android:layout_width="300dp"
-                android:layout_height="15dp"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:paddingTop="4dp"
-                app:rcBackgroundColor="@color/colorBGdark"
-                app:rcBackgroundPadding="0dp"
-                app:rcMax="1"
-                app:rcProgress="0.4"
-                app:rcProgressColor="@color/color1"
-                app:rcRadius="5dp"
-                app:rcReverse="false" />
-
-            <TextView
-                android:id="@+id/wpm_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:textColor="@color/color1"
-                android:textSize="12sp"
-                android:text="100 WPM"/>
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/wpm_1"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:textColor="@color/color1"
+            android:textSize="13sp"
+            android:text="0 WPM"/>
 
         <TextView
             android:id="@+id/player1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/progress_1"
             android:paddingLeft="5dp"
             android:textColor="@color/color1"
             android:text="Player 1"
             android:textSize="10sp"/>
+    </RelativeLayout>
 
-        <!-- Player 2 -->
-        <RelativeLayout
-            android:layout_width="match_parent"
+    <!-- Player 2 -->
+    <RelativeLayout
+        android:id="@+id/rl_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_1"
+        android:paddingLeft="5dp"
+        android:paddingTop="2dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal">
+
+        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+            android:id="@+id/progress_2"
+            android:layout_width="300dp"
+            android:layout_height="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@id/wpm_2"
+            app:rcBackgroundColor="@color/colorBGdark"
+            app:rcBackgroundPadding="0dp"
+            app:rcMax="1"
+            app:rcProgress="0"
+            app:rcProgressColor="@color/color2"
+            app:rcRadius="5dp"
+            app:rcReverse="false" />
+
+        <TextView
+            android:id="@+id/wpm_2"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:orientation="horizontal">
-
-            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-                android:id="@+id/progress_2"
-                android:layout_width="300dp"
-                android:layout_height="15dp"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:paddingTop="4dp"
-                app:rcBackgroundColor="@color/colorBGdark"
-                app:rcBackgroundPadding="0dp"
-                app:rcMax="1"
-                app:rcProgress="0.6"
-                app:rcProgressColor="@color/color2"
-                app:rcRadius="5dp"
-                app:rcReverse="false" />
-
-            <TextView
-                android:id="@+id/wpm_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:textColor="@color/color2"
-                android:textSize="12sp"
-                android:text="100 WPM"/>
-        </RelativeLayout>
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:textColor="@color/color2"
+            android:textSize="13sp"
+            android:text="0 WPM"/>
 
         <TextView
             android:id="@+id/player2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/progress_2"
             android:paddingLeft="5dp"
             android:textColor="@color/color2"
             android:text="Player 2"
             android:textSize="10sp"/>
 
-        <!-- Player 3 -->
-        <RelativeLayout
-            android:layout_width="match_parent"
+    </RelativeLayout>
+
+    <!-- Player 3 -->
+    <RelativeLayout
+        android:id="@+id/rl_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_2"
+        android:paddingLeft="5dp"
+        android:paddingTop="2dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal">
+
+        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+            android:id="@+id/progress_3"
+            android:layout_width="300dp"
+            android:layout_height="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@id/wpm_3"
+            app:rcBackgroundColor="@color/colorBGdark"
+            app:rcBackgroundPadding="0dp"
+            app:rcMax="1"
+            app:rcProgress="0"
+            app:rcProgressColor="@color/color3"
+            app:rcRadius="5dp"
+            app:rcReverse="false" />
+
+        <TextView
+            android:id="@+id/wpm_3"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:orientation="horizontal">
-
-            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-                android:id="@+id/progress_3"
-                android:layout_width="300dp"
-                android:layout_height="15dp"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:paddingTop="4dp"
-                app:rcBackgroundColor="@color/colorBGdark"
-                app:rcBackgroundPadding="0dp"
-                app:rcMax="1"
-                app:rcProgress="0.45"
-                app:rcProgressColor="@color/color3"
-                app:rcRadius="5dp"
-                app:rcReverse="false" />
-
-            <TextView
-                android:id="@+id/wpm_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:textColor="@color/color3"
-                android:textSize="12sp"
-                android:text="100 WPM"/>
-        </RelativeLayout>
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:textColor="@color/color3"
+            android:textSize="13sp"
+            android:text="0 WPM"/>
 
         <TextView
             android:id="@+id/player3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/progress_3"
             android:paddingLeft="5dp"
             android:textColor="@color/color3"
             android:text="Player 3"
             android:textSize="10sp"/>
+    </RelativeLayout>
 
-        <!-- Player 4 -->
-        <RelativeLayout
-            android:layout_width="match_parent"
+    <!-- Player 4 -->
+    <RelativeLayout
+        android:id="@+id/rl_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_3"
+        android:paddingLeft="5dp"
+        android:paddingTop="2dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal">
+
+        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+            android:id="@+id/progress_4"
+            android:layout_width="300dp"
+            android:layout_height="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@id/wpm_4"
+            app:rcBackgroundColor="@color/colorBGdark"
+            app:rcBackgroundPadding="0dp"
+            app:rcMax="1"
+            app:rcProgress="0"
+            app:rcProgressColor="@color/color4"
+            app:rcRadius="5dp"
+            app:rcReverse="false" />
+
+        <TextView
+            android:id="@+id/wpm_4"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:orientation="horizontal">
-
-            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-                android:id="@+id/progress_4"
-                android:layout_width="300dp"
-                android:layout_height="15dp"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:paddingTop="4dp"
-                app:rcBackgroundColor="@color/colorBGdark"
-                app:rcBackgroundPadding="0dp"
-                app:rcMax="1"
-                app:rcProgress="0.29"
-                app:rcProgressColor="@color/color4"
-                app:rcRadius="5dp"
-                app:rcReverse="false" />
-
-            <TextView
-                android:id="@+id/wpm_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:textColor="@color/color4"
-                android:textSize="12sp"
-                android:text="100 WPM"/>
-        </RelativeLayout>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:gravity="right"
+            android:text="0 WPM"
+            android:textColor="@color/color4"
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/player4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/progress_4"
             android:paddingLeft="5dp"
             android:textColor="@color/color4"
             android:text="Player 4"
             android:textSize="10sp"/>
 
-        <!-- Timer and button -->
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:padding="5dp">
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/timer"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textAlignment="gravity"
-                android:textColor="@color/colorWhite"
-                android:textSize="20sp"
-                android:text="TIME: 0:00.00" />
-
-            <Button
-                android:id="@+id/resultsButton"
-                android:onClick="goToResults"
-                android:layout_width="130dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:text="Results"/>
-
-        </RelativeLayout>
+    <!-- Timer and button -->
+    <RelativeLayout
+        android:id="@+id/timer_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/rl_4"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:padding="5dp"
-            android:gravity="bottom"
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="TIME: 0:00.00"
+            android:textAlignment="gravity"
             android:textColor="@color/colorWhite"
-            android:text="Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares to do battle with the First Order."/>
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/mistakes"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/timer"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="MISTAKES: 0"
+            android:textAlignment="gravity"
+            android:textColor="@color/colorGreen"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/timer_button"
+        android:gravity="bottom"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/movieDescription"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/timer_button"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="14dp"
+            android:text="@string/dummy_text"/>
 
         <EditText
+            android:id="@+id/userInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@id/movieDescription"
+            android:layout_gravity="bottom"
             android:padding="5dp"
             android:textColor="@color/colorWhite"
-            android:hint="Skywalker"/>
+            android:hint="Type here"
+            android:visibility="visible"/>
+
+        <Button
+            android:id="@+id/resultsButton"
+            android:onClick="goToResults"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/movieDescription"
+            android:layout_centerHorizontal="true"
+            android:text="Results"
+            android:visibility="gone"/>
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
