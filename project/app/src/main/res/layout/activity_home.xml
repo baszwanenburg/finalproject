@@ -8,8 +8,8 @@
     tools:context="com.example.bas.project.ActivityHome">
 
     <ImageView android:src="@drawable/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="72dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:padding="0sp"
         android:layout_marginTop="30sp"
         android:layout_marginBottom="24dp"
@@ -22,32 +22,44 @@
         android:gravity="center|bottom">
         <Button
             android:id="@+id/playButton"
-            android:layout_width="300dp"
+            android:layout_width="200dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="110dp"
+            android:layout_marginBottom="100dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/button_rounded"
             android:textColor="@color/colorWhite"
             android:text="Play"/>
 
         <Button
             android:id="@+id/loginButton"
-            android:layout_width="300dp"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginBottom="40dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/button_rounded"
             android:textColor="@color/colorWhite"
             android:text="Login"/>
 
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_rounded"
+            android:textColor="@color/colorWhite"
+            android:text="Logout"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/currentUserText"
-            android:layout_width="300dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="10sp"
             android:layout_alignParentBottom="true"
+            android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:text="Currently logged in  as...."/>
+            android:text="Currently logged in  as...."
+            android:textSize="12sp"/>
     </RelativeLayout>
 </LinearLayout>

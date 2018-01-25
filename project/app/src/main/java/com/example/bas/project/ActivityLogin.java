@@ -79,7 +79,7 @@ public class ActivityLogin extends AppCompatActivity {
                         loginUser(email, password);
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),
-                                "Ingevoerde gegevens onjuist", Toast.LENGTH_SHORT).show();
+                                "Incorrect input", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                     break;
@@ -102,11 +102,11 @@ public class ActivityLogin extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(ActivityLogin.this,
-                                    "Succesvol ingelogd", Toast.LENGTH_SHORT).show();
+                                    "Succesfully logged in", Toast.LENGTH_SHORT).show();
                             updateUI(user);
                         } else {
                             Toast.makeText(ActivityLogin.this,
-                                    "Authenticatie mislukt", Toast.LENGTH_SHORT).show();
+                                    "The email or password is incorrect", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -119,11 +119,14 @@ public class ActivityLogin extends AppCompatActivity {
 
         // Send the user to the fragment activity if already logged in
         if (currentUser != null) {
-            Toast.makeText(ActivityLogin.this, "Currently logged in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivityLogin.this, "Already logged in", Toast.LENGTH_SHORT).show();
             updateUI(currentUser);
         }
     }
 
+    /**
+     * Navigates the user to the register screen.
+     */
     public void goToRegister() {
         Intent intent = new Intent(ActivityLogin.this, ActivityRegister.class);
         startActivity(intent);

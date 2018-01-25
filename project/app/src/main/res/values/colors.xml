@@ -9,8 +9,7 @@
     <color name="colorLightGrey">#999999</color>
     <color name="colorGreen">#00FF00</color>
     <color name="colorRed">#FF0000</color>
-    <color name="color1">#ff4444</color>
-    <color name="color2">#33bbee</color>
-    <color name="color3">#b83df2</color>
-    <color name="color4">#eb9258</color>
+    <color name="color1">#33bbee</color>
+    <color name="color2">#b83df2</color>
+    <color name="color3">#eb9258</color>
 </resources>

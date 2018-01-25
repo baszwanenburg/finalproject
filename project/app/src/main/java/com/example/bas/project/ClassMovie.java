@@ -1,9 +1,11 @@
 package com.example.bas.project;
 
+import java.io.Serializable;
+
 /**
  * Created by Bas on 11-1-2018.
  */
-public class ClassMovie {
+public class ClassMovie implements Serializable {
     private String id;
     private String image;
     private String title;

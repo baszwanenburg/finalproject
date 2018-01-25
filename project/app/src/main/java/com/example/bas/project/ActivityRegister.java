@@ -85,8 +85,8 @@ public class ActivityRegister extends AppCompatActivity {
                             registerUser(username, email, password);
                         }
                         else{
-                            Toast.makeText(getApplicationContext(), "Password needs to be " +
-                                    "at least 6 characters long", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Password requires a " +
+                                    "a minimum length of 6 characters", Toast.LENGTH_SHORT).show();
                         }
                     }
                     catch (Exception e){
@@ -118,35 +118,43 @@ public class ActivityRegister extends AppCompatActivity {
                             updateUI(currentUser);
                         } else {
                             Toast.makeText(ActivityRegister.this,
-                                    "Authenticatie mislukt", Toast.LENGTH_SHORT).show();
+                                    "This email is already in use", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
+    /**
+     * Adds a new user to Firebase.
+     */
     public void createUser(String username, String email, String id){
-        HashMap favorites = new HashMap<>();
-        ClassUser currentUser = new ClassUser(id, username, favorites, email);
+        ClassUser currentUser = new ClassUser(id, username, email);
 
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("User");
-        dbref.child("user").child(id).setValue(currentUser);
+        dbref.child(id).setValue(currentUser);
     }
 
+    /**
+     * Navigates the user to the login screen.
+     */
     public void goToLogin() {
         Intent intent = new Intent(ActivityRegister.this, ActivityLogin.class);
         startActivity(intent);
     }
 
+    /**
+     * Updates the user interface based on whether or not a user is logged in.
+     */
     public void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             Toast.makeText(getApplicationContext(),
-                    "Registratie geslaagd", Toast.LENGTH_SHORT).show();
+                    "Successfully registered", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(ActivityRegister.this, ActivityHome.class);
             startActivity(intent);
             finish();
         } else {
             Toast.makeText(getApplicationContext(),
-                    "Registratie mislukt", Toast.LENGTH_SHORT).show();
+                    "Registration failed", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -49,7 +49,7 @@
             android:layout_below="@id/progress_1"
             android:paddingLeft="5dp"
             android:textColor="@color/color1"
-            android:text="Player 1"
+            android:text="Current progress"
             android:textSize="10sp"/>
     </RelativeLayout>
 
@@ -96,7 +96,7 @@
             android:layout_below="@id/progress_2"
             android:paddingLeft="5dp"
             android:textColor="@color/color2"
-            android:text="Player 2"
+            android:text="Personal best"
             android:textSize="10sp"/>
 
     </RelativeLayout>
@@ -144,57 +144,8 @@
             android:layout_below="@id/progress_3"
             android:paddingLeft="5dp"
             android:textColor="@color/color3"
-            android:text="Player 3"
+            android:text="High score"
             android:textSize="10sp"/>
-    </RelativeLayout>
-
-    <!-- Player 4 -->
-    <RelativeLayout
-        android:id="@+id/rl_4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rl_3"
-        android:paddingLeft="5dp"
-        android:paddingTop="2dp"
-        android:paddingRight="5dp"
-        android:orientation="horizontal">
-
-        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-            android:id="@+id/progress_4"
-            android:layout_width="300dp"
-            android:layout_height="5dp"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center"
-            android:layout_toLeftOf="@id/wpm_4"
-            app:rcBackgroundColor="@color/colorBGdark"
-            app:rcBackgroundPadding="0dp"
-            app:rcMax="1"
-            app:rcProgress="0"
-            app:rcProgressColor="@color/color4"
-            app:rcRadius="5dp"
-            app:rcReverse="false" />
-
-        <TextView
-            android:id="@+id/wpm_4"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:gravity="right"
-            android:text="0 WPM"
-            android:textColor="@color/color4"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/player4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progress_4"
-            android:paddingLeft="5dp"
-            android:textColor="@color/color4"
-            android:text="Player 4"
-            android:textSize="10sp"/>
-
     </RelativeLayout>
 
     <!-- Timer and button -->
@@ -202,7 +153,7 @@
         android:id="@+id/timer_button"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@id/rl_4"
+        android:layout_below="@id/rl_3"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
 
@@ -240,16 +191,22 @@
         android:layout_below="@id/timer_button"
         android:gravity="bottom"
         android:layout_alignParentBottom="true">
-        <TextView
-            android:id="@+id/movieDescription"
+
+        <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/timer_button"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:textColor="@color/colorWhite"
-            android:textSize="14dp"
-            android:text="@string/dummy_text"/>
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/movieDescription"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/timer_button"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="16dp"
+                android:text="@string/dummy_text"/>
+        </ScrollView>
 
         <EditText
             android:id="@+id/userInput"
@@ -257,6 +214,7 @@
             android:layout_height="30dp"
             android:layout_below="@id/movieDescription"
             android:layout_gravity="bottom"
+            android:inputType="textFilter"
             android:padding="5dp"
             android:textColor="@color/colorWhite"
             android:hint="Type here"
