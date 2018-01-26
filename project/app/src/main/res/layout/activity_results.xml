@@ -129,51 +129,69 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/rowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="2dp"
+        android:orientation="horizontal"
+        android:background="@color/colorBackground">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/rankLB"
+            android:layout_width="50dp"
+            android:layout_height="15dp"
             android:paddingLeft="5dp"
             android:textColor="@color/colorWhite"
             android:textSize="12sp"
-            android:text="   #"/>
+            android:text="Rank" />
 
         <TextView
+            android:id="@+id/nameLB"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="80dp"
+            android:layout_height="15dp"
+            android:layout_toLeftOf="@id/dateLB"
             android:textColor="@color/colorWhite"
             android:textSize="12sp"
-            android:text="Username"/>
+            android:text="Username" />
+
         <TextView
+            android:id="@+id/dateLB"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="15dp"
+            android:layout_toLeftOf="@id/timeLB"
             android:paddingLeft="50dp"
             android:textColor="@color/colorWhite"
             android:textSize="12sp"
-            android:text="Date"/>
+            android:text="Speed" />
 
         <TextView
+            android:id="@+id/timeLB"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Time"
+            android:layout_height="15dp"
+            android:layout_toLeftOf="@id/speedLB"
             android:paddingLeft="50dp"
             android:textColor="@color/colorWhite"
-            android:textSize="12sp"/>
-
+            android:textSize="12sp"
+            android:text="Time" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
+            android:id="@+id/speedLB"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="30dp"
             android:paddingRight="5dp"
             android:textColor="@color/colorWhite"
             android:textSize="12sp"
-            android:text="Speed"/>
+            android:text="Date" />
 
-    </LinearLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/leaderboardListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/colorWhite"/>
+
 </LinearLayout>

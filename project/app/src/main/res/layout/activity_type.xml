@@ -19,11 +19,10 @@
 
         <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
             android:id="@+id/progress_1"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="15dp"
             android:layout_alignParentStart="true"
             android:layout_gravity="center"
-            android:layout_toLeftOf="@id/wpm_1"
             app:rcBackgroundColor="@color/colorBGdark"
             app:rcBackgroundPadding="0dp"
             app:rcMax="1"
@@ -31,16 +30,6 @@
             app:rcProgressColor="@color/color1"
             app:rcRadius="5dp"
             app:rcReverse="false" />
-
-        <TextView
-            android:id="@+id/wpm_1"
-            android:layout_width="70dp"
-            android:layout_height="15dp"
-            android:layout_alignParentRight="true"
-            android:gravity="right"
-            android:textColor="@color/color1"
-            android:textSize="13sp"
-            android:text="0 WPM"/>
 
         <TextView
             android:id="@+id/player1"
@@ -66,11 +55,10 @@
 
         <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
             android:id="@+id/progress_2"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_alignParentStart="true"
             android:layout_gravity="center"
-            android:layout_toLeftOf="@id/wpm_2"
             app:rcBackgroundColor="@color/colorBGdark"
             app:rcBackgroundPadding="0dp"
             app:rcMax="1"
@@ -78,16 +66,6 @@
             app:rcProgressColor="@color/color2"
             app:rcRadius="5dp"
             app:rcReverse="false" />
-
-        <TextView
-            android:id="@+id/wpm_2"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:gravity="right"
-            android:textColor="@color/color2"
-            android:textSize="13sp"
-            android:text="0 WPM"/>
 
         <TextView
             android:id="@+id/player2"
@@ -114,11 +92,12 @@
 
         <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
             android:id="@+id/progress_3"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="5dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center"
-            android:layout_toLeftOf="@id/wpm_3"
             app:rcBackgroundColor="@color/colorBGdark"
             app:rcBackgroundPadding="0dp"
             app:rcMax="1"
@@ -126,16 +105,6 @@
             app:rcProgressColor="@color/color3"
             app:rcRadius="5dp"
             app:rcReverse="false" />
-
-        <TextView
-            android:id="@+id/wpm_3"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:gravity="right"
-            android:textColor="@color/color3"
-            android:textSize="13sp"
-            android:text="0 WPM"/>
 
         <TextView
             android:id="@+id/player3"
@@ -146,41 +115,55 @@
             android:textColor="@color/color3"
             android:text="High score"
             android:textSize="10sp"/>
+
     </RelativeLayout>
 
     <!-- Timer and button -->
     <RelativeLayout
         android:id="@+id/timer_button"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_below="@id/rl_3"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
 
         <TextView
-            android:id="@+id/timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="TIME: 0:00.00"
-            android:textAlignment="gravity"
-            android:textColor="@color/colorWhite"
-            android:textSize="20sp" />
-
-        <TextView
             android:id="@+id/mistakes"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@id/timer"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="MISTAKES: 0"
             android:textAlignment="gravity"
             android:textColor="@color/colorGreen"
             android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="TIME: 0:00.00"
+            android:textAlignment="gravity"
+            android:textColor="@color/colorWhite"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/wpm_1"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center|right"
+            android:text="0 WPM"
+            android:textColor="@color/color1"
+            android:textSize="15sp" />
 
     </RelativeLayout>
 
@@ -204,7 +187,7 @@
                 android:layout_weight="1"
                 android:padding="5dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:text="@string/dummy_text"/>
         </ScrollView>
 

@@ -1,10 +1,8 @@
 package com.example.bas.project;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,9 +25,7 @@ public class ActivityHome extends AppCompatActivity {
 
     private FirebaseUser user;
     private String userid;
-    String username;
     TextView currentUserText;
-    Button login, logout;
 
     /**
      * Initializes buttons and sets listeners.
@@ -64,7 +60,6 @@ public class ActivityHome extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String username = dataSnapshot.child("username").getValue().toString();
-                    Log.d("username: ", username + " :)");
                     currentUserText.setText("Currently logged in as " + username);
                 }
 
@@ -88,7 +83,7 @@ public class ActivityHome extends AppCompatActivity {
             switch (view.getId()) {
                 // Go to the fragment activity, regardless of whether or not someone is logged in
                 case R.id.playButton:
-                    goToMyDatabase(username);
+                    goToMyDatabase();
                     break;
 
                 case R.id.logoutButton:
@@ -113,10 +108,8 @@ public class ActivityHome extends AppCompatActivity {
         }
     }
 
-    public void goToMyDatabase(String username) {
+    public void goToMyDatabase() {
         Intent intent = new Intent(this, ActivityType.class);
-        intent.putExtra("username", username);
-        Log.d("username0: ", username + " :)");
         startActivity(intent);
     }
 

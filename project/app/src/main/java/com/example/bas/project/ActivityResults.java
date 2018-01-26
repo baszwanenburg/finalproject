@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,10 +20,13 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class ActivityResults extends AppCompatActivity {
 
     private FirebaseUser user;
-    String yourTime, yourSpeed;
+    private ArrayList<ClassLeaderboard> items = new ArrayList<>();
+    String yourTime, yourSpeed, userid;
     ImageView coverView;
     TextView titleView, overView, yearView, reView, titleView2;
 
@@ -30,17 +34,17 @@ public class ActivityResults extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-
         user = FirebaseAuth.getInstance().getCurrentUser();
+        userid = user.getUid();
 
         Intent intent = getIntent();
         ClassMovie movieData = (ClassMovie)getIntent().getSerializableExtra("movieClass");
 
         setMovieViews(movieData);
         setStatViews(intent);
+        getData(movieData.getMovieTitle());
 
-        //getData(movieData.getMovieTitle());
-        //loadLeaderboard(user);
+        Log.d("test0: ", movieData.getMovieTitle());
 
         Toolbar myChildToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myChildToolbar);
@@ -91,44 +95,67 @@ public class ActivityResults extends AppCompatActivity {
 
     /**
      * Retrieves Firebase data
-     *
+     */
     public void getData(String movieTitle) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-        DatabaseReference dbref = fbdb.getReference("User/" + movieTitle);
-        Query qref = dbref.orderByChild("score").limitToFirst(10);
+        DatabaseReference dbref = fbdb.getReference("Scores").child(movieTitle);
+        //Query qref = dbref.orderByChild("score").limitToFirst(10);
 
-        qref.addListenerForSingleValueEvent(new ValueEventListener() {
-             @Override
-             public void onDataChange(DataSnapshot dataSnapshot) {
-                 // Look through Firebase and find the requested information
-                 for (DataSnapshot child:dataSnapshot.getChildren()){
-                     String username = child.getKey();
-                     String date = dataSnapshot.child(userid).child("date").getValue().toString();
-                     String time = dataSnapshot.child(userid).child("time").getValue().toString();
-                     String speed = dataSnapshot.child(userid).child("speed").getValue().toString();
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Look through Firebase and find the requested information
+                Log.d("test1: ", "dayo");
 
-                     // Create new instance of the user class and and it to the database
-                     ClassLeaderboard user = new ClassLeaderboard(userid, username, favorites, email);
-                     userDatabase.add(user);
-                     nameAndID.put(username,userid);
-                 }
-                 makeListView(nameAndID);
-             }
+                Log.d("test3 ", ""+ dataSnapshot.getChildrenCount());
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    ClassLeaderboard post = postSnapshot.getValue(ClassLeaderboard.class);
+                    items.add(post);
 
-             @Override
-             public void onCancelled(DatabaseError databaseError) {
-                 Log.d("getData() error", "Database or connectivity error");
-             }
-    });
+                    Log.d("test2: ", post.getTime() + "");
+                }
+
+                /*
+                for (DataSnapshot shot: dataSnapshot.getChildren()) {
+
+                    //ClassLeaderboard stats = shot.getValue(ClassLeaderboard.class);
+
+                    String username  = shot.child("username").getValue().toString();
+                    String highscore = shot.child("score").getValue().toString();
+                    String date      = shot.child("date").getValue().toString();
+                    String time      = shot.child("time").getValue().toString();
+                    String speed     = shot.child("speed").getValue().toString();
+
+                    // Create new instance of the user class and and it to the database
+                    ClassLeaderboard stats = new ClassLeaderboard(username, highscore, date, time, speed);
+
+                    Log.d("test2: ", "dayo");
+                    Log.d("stats: ", stats.getScore() + "?");
+
+                    items.add(stats);
+                }
+                */
+                loadLeaderboard(items);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("getData() error", "Database or connectivity error");
+            }
+        });
+    }
 
 
     /**
      * Displays the 10 highest scores from the user database into a listview.
-     *
-    public void loadLeaderboard(FirebaseUser user) {
+     */
+    public void loadLeaderboard(ArrayList<ClassLeaderboard> items) {
         MyAdapter adapter;
-        adapter = new MyAdapter(this, users);
+        adapter = new MyAdapter(this, items);
+
+        Log.d("test3: ", "dayo");
+
+        ListView listView = findViewById(R.id.leaderboardListView);
         listView.setAdapter(adapter);
     }
-    */
 }

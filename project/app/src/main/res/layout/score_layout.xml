@@ -32,40 +32,41 @@
                 android:id="@+id/nameView"
                 android:layout_width="wrap_content"
                 android:layout_height="15dp"
-                android:layout_toLeftOf="@id/dateView"
+                android:layout_toLeftOf="@id/speedView"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
                 android:text="Username" />
 
             <TextView
-                android:id="@+id/dateView"
+                android:id="@+id/speedView"
                 android:layout_width="wrap_content"
                 android:layout_height="15dp"
                 android:layout_toLeftOf="@id/timeView"
-                android:paddingLeft="50dp"
+                android:paddingLeft="30dp"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
-                android:text="Date" />
+                android:text="Speed" />
 
             <TextView
                 android:id="@+id/timeView"
                 android:layout_width="wrap_content"
                 android:layout_height="15dp"
-                android:layout_toLeftOf="@id/speedView"
+                android:layout_toLeftOf="@id/dateView"
                 android:paddingLeft="50dp"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
                 android:text="Time" />
 
             <TextView
-                android:id="@+id/speedView"
-                android:layout_width="wrap_content"
+                android:id="@+id/dateView"
+                android:layout_width="100dp"
                 android:layout_height="15dp"
                 android:layout_alignParentRight="true"
+                android:gravity="right"
                 android:paddingLeft="30dp"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
-                android:text="Speed" />
+                android:text="Date" />
 
         </RelativeLayout>
 

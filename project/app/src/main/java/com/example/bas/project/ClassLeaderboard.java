@@ -13,18 +13,38 @@ import java.util.HashMap;
 public class ClassLeaderboard implements Serializable {
     public String username;
     public String highscore;
-    public String date;
+    public Long date;
     public String time;
     public String speed;
 
     // Default constructor for Firebase
     public ClassLeaderboard() {}
 
-    public ClassLeaderboard(String username, String highscore, String date, String time, String speed) {
+    public ClassLeaderboard(String username, String highscore, Long date, String time, String speed) {
         this.username  = username;
         this.highscore = highscore;
         this.date      = date;
         this.time      = time;
         this.speed     = speed;
+    }
+
+    String getUsername() {
+        return username;
+    }
+
+    String getScore() {
+        return highscore;
+    }
+
+    Long getDate() {
+        return date;
+    }
+
+    String getTime() {
+        return time;
+    }
+
+    String getSpeed() {
+        return speed;
     }
 }
