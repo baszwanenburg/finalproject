@@ -1,8 +1,33 @@
-# Proposal: Type Racer for Android
+# Programmeerproject: Type Racer
 Bas Zwanenburg
 11980370
 
-## Problem Statement
+## About
+Met deze app wordt het typspelletje Type Racer geïmplementeerd, dat gebaseerd is op het gelijknamige browserspelletje. Hierbij wordt een willekeurig stukje tekst naar de gebruiker verzonden en dit dient zo snel mogelijk correct te worden overgetypt. De tekst beschrijft de plot van een willekeurig recente of nog aan te komen film, en wordt met behulp van The Movie DataBase (TMDB) API via het internet verkregen. De API returnt de gegevens van 20 films, en de JSON die de app ophaalt wordt regelmatig aangepast. 
+
+Tijdens het overtypen van de tekst loopt een timer. Hiermee wordt het aantal woorden per minuut dat de speler correct heeft overgetypt bijgehouden. De progressie wordt gevisualiseerd met behulp van een laadbalkje. De prestatie van de speler wordt beoordeeld op de snelheid, waarbij een hogere snelheid tot een lagere score leidt (een lage score is in dit spel juist gewenst). Indien de gebruiker zich heeft geregistreerd en is ingelogd, wordt de beste prestatie van de gebruiker vastgelegd in een leaderboard met behulp van Firebase, en dit gebeurt voor elk aparte film dat de gebruiker kan ontvangen (er zijn dus minstens 20 leaderboards die door Firebase worden bijgehouden). Daarnaast wordt ook nog twee laadbalkjes weergegeven die het persoonlijk record (indien aanwezig) en de absolute high score van het desbetreffend stuk tekst visualiseert. Deze laadbalkjes zijn bedoeld om een competitief gevoel te geven. 
+
+Het nut van de app is dat de gebruiker door de competitie op een leuke en uitdagende manier leert om te gaan met het on-screen toetsenbord van de smartphone. Veel mensen hebben moeite met het typen en zijn vaak veel langzamer dan wanneer ze een traditionele toetsenbord gebruiken. Het idee is dus dat dit spel de gebruiker hier enigszins mee helpt. Na afloop wordt ook nog aangetoond van welke film de beschrijving afkomstig is; als bonus krijgt de gebruiker dus ook mogelijke filmsuggesties.
+
+
+## Screenshots
+![Screenshots](/docs/appScreenshots.png)
+
+## Product Video
+
+## Better Code Hub
+[![BCH compliance](https://bettercodehub.com/edge/badge/baszwanenburg/finalproject?branch=master)](https://bettercodehub.com/)
+
+## Licenses
+Copyright 2018 baszwanenburg
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this work except in compliance with the License. You may obtain a copy of the License in the LICENSE file, or at:
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+# Problem Statement
 De smartphone is een nog relatief nieuwe technologie. De laatste paar jaar is het apparaat ook steeds populairder geworden bij de ouderen. Deze mensen, die niet zijn opgegroeid met computers en er nooit mee hebben gewerkt, hebben vaak veel moeite met typen. Ze hebben echter niet de mogelijkheid om hier wat aan te doen. De bedoeling is dat gebruikers met deze app op een leuke manier kunnen oefenen en zo hun typvaardigheid vanzelf verbeteren. Uiteraard is dit niet alleen bedoeld voor ouderen, maar voor iedereen die verlangt om sneller te typen.
 
 ## Solution
