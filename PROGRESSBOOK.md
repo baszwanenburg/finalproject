@@ -35,3 +35,45 @@ Tijdens de presentatie is de volgende feedback gegeven:
 
 ## Week 3
 ###### Maandag 22/1: 
+- Geörienteerd op API voor multiplayer mogelijkheden
+- Code efficiënter gemaakt
+- Meer classes toegevoegd, worden voornamelijk gebruikt voor intents
+
+###### Dinsdag 23/1:
+- Aparte listview layout aangemaakt voor de leaderboard
+- Prestaties worden nu opgeslagen in Firebase
+- Conditie toegevoegd om er voor te zorgen dat de statistieken van spelers alleen overschreven worden als ze daadwerkelijk een high score hebben behaald
+
+###### Woensdag 24/1:
+Afwezig in verband met een tentamen van mijn major.
+
+###### Donderdag 25/1:
+- Structuur van Firebase aangepast
+- Alle films waar minstens één speler een score heeft behaald, worden onder een aparte node weergegeven
+- Multiplayer idee geschrapt; er wordt vanaf nu gebruikgemaakt van de suggestie van de afgelopen presentatiesessie
+
+###### Vrijdag 26/1:
+- Beta versie is af
+- Presentatie opgezet en gepresenteerd
+
+
+## Week 4
+###### Maandag 29/1:
+- De laatste bugs en crashes zijn uit de app gehaald
+- Code is waar nodig van comments voorzien
+
+###### Dinsdag 30/1:
+- Code review
+- Layout van de app is mooier gemaakt
+- Nieuwe library toegevoegd voor visualisatie
+
+###### Woensdag 31/1:
+Afwezig in verband met een tentamen van mijn major.
+
+###### Donderdag 1/2:
+- Repository check gedaan
+- Better Code Hub gebruikt
+- Readme aangepast
+- Verslag geschreven
+- Product video gemaakt
+- Progress book voltooid
