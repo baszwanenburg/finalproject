@@ -31,7 +31,9 @@ public class ActivityResults extends AppCompatActivity {
 
     private FirebaseUser user;
     private ArrayList<ClassLeaderboard> items = new ArrayList<>();
-    String yourTime, yourSpeed, userid;
+    ClassMovie movieData;
+    String movieImage, movieTitle, movieOverview, movieYear, movieReview,
+            yourTime, yourSpeed, userid;
     ImageView coverView;
     TextView titleView, overView, yearView, reView, titleView2;
 
@@ -47,13 +49,19 @@ public class ActivityResults extends AppCompatActivity {
 
         // Get the data from the previous activity and display it
         Intent intent = getIntent();
-        ClassMovie movieData = (ClassMovie)getIntent().getSerializableExtra("movieClass");
+        movieData = (ClassMovie)getIntent().getSerializableExtra("movieClass");
 
+        // Set all views within the activity
         setMovieViews(movieData);
         setStatViews(intent);
         getData(movieData.getMovieTitle());
+        setToolBar();
+    }
 
-        // Display the toolbar with a home button
+    /**
+     * Displays the toolbar with a home button that redirects the user to the Home Activity.
+     */
+    public void setToolBar() {
         Toolbar myChildToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myChildToolbar);
         ActionBar ab = getSupportActionBar();
@@ -65,18 +73,7 @@ public class ActivityResults extends AppCompatActivity {
      * the movie class to set the views accordingly.
      */
     public void setMovieViews(ClassMovie movieData) {
-        coverView  = findViewById(R.id.coverView);
-        titleView  = findViewById(R.id.titleView);
-        overView   = findViewById(R.id.overView);
-        yearView   = findViewById(R.id.yearView);
-        reView     = findViewById(R.id.reView);
-        titleView2 = findViewById(R.id.titleView2);
-
-        String movieImage    = movieData.getImage();
-        String movieTitle    = movieData.getMovieTitle();
-        String movieOverview = movieData.getOverview();
-        String movieYear     = movieData.getYear();
-        String movieReview   = movieData.getReview();
+        getMovieViewsAndContent();
 
         titleView.setText(movieTitle);
         overView.setText(movieOverview);
@@ -84,6 +81,21 @@ public class ActivityResults extends AppCompatActivity {
         reView.setText(movieReview + "/10");
         Picasso.with(this).load(movieImage).into(coverView);
         titleView2.setText("(" + movieTitle + ")");
+    }
+
+    public void getMovieViewsAndContent() {
+        coverView  = findViewById(R.id.coverView);
+        titleView  = findViewById(R.id.titleView);
+        overView   = findViewById(R.id.overView);
+        yearView   = findViewById(R.id.yearView);
+        reView     = findViewById(R.id.reView);
+        titleView2 = findViewById(R.id.titleView2);
+
+        movieImage    = movieData.getImage();
+        movieTitle    = movieData.getMovieTitle();
+        movieOverview = movieData.getOverview();
+        movieYear     = movieData.getYear();
+        movieReview   = movieData.getReview();
     }
 
     /**

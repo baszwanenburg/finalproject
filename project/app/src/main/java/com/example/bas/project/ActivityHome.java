@@ -25,6 +25,7 @@ public class ActivityHome extends AppCompatActivity {
     private FirebaseUser user;
     private String userid;
     TextView currentUserText;
+    Button login, logout, database;
 
     /**
      * Initializes buttons and sets listeners.
@@ -36,10 +37,22 @@ public class ActivityHome extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         currentUserText = findViewById(R.id.currentUserText);
-        Button login = findViewById(R.id.loginButton);
-        Button logout = findViewById(R.id.logoutButton);
-        Button database = findViewById(R.id.playButton);
+        login = findViewById(R.id.loginButton);
+        logout = findViewById(R.id.logoutButton);
+        database = findViewById(R.id.playButton);
 
+        // Set all button listeners
+        login.setOnClickListener(new Click());
+        logout.setOnClickListener(new Click());
+        database.setOnClickListener(new Click());
+
+        updateUI();
+    }
+
+    /**
+     * Changes the UI based on whether someone is currently logged in or not.
+     */
+    public void updateUI() {
         // If no user is logged in, show the login button
         if (user == null) {
             logout.setVisibility(View.GONE);
@@ -52,30 +65,7 @@ public class ActivityHome extends AppCompatActivity {
             login.setVisibility(View.GONE);
 
             userid = user.getUid();
-
-            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-            DatabaseReference dbref = fbdb.getReference("User/" + userid);
-
-            /*
-            dbref.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String username = dataSnapshot.child("username").getValue().toString();
-                    currentUserText.setText("Currently logged in as " + username);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    throw databaseError.toException();
-                }
-            });
-            */
         }
-
-        // Set all button listeners
-        login.setOnClickListener(new Click());
-        logout.setOnClickListener(new Click());
-        database.setOnClickListener(new Click());
     }
 
     /**
@@ -92,12 +82,10 @@ public class ActivityHome extends AppCompatActivity {
                 // Log out user and navigate to the login screen
                 case R.id.logoutButton:
                     FirebaseAuth.getInstance().signOut();
-                    finish();
                     goToLoginScreen();
 
                     Toast.makeText(getApplicationContext(), "Successfully logged out",
                             Toast.LENGTH_SHORT).show();
-                    finish();
                     break;
 
                 // Go to the login screen activity

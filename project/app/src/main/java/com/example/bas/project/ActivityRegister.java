@@ -35,31 +35,25 @@ public class ActivityRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setToolBar();
 
         mAuth = FirebaseAuth.getInstance();
-
-        // Set up home button (back to Main Activity)
-        Toolbar myChildToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(myChildToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
 
         // Set up button listeners for registering and the login screen
         Button register = findViewById(R.id.registerButton);
         Button login = findViewById(R.id.goToLogin);
         register.setOnClickListener(new Click());
         login.setOnClickListener(new Click());
+    }
 
-        // No user should be signed in on the register screen
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                if (currentUser != null) {
-                    mAuth.signOut();
-                }
-            }
-        };
+    /**
+     * Displays the toolbar with a home button that redirects the user to the Home Activity.
+     */
+    public void setToolBar() {
+        Toolbar myChildToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myChildToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -72,22 +66,7 @@ public class ActivityRegister extends AppCompatActivity {
                 // In case of registration, checks if the user's input is correct
                 case R.id.registerButton:
                     try{
-                        EditText getName = findViewById(R.id.getUsername);
-                        EditText getEmail = findViewById(R.id.getUserEmail);
-                        EditText getPassword = findViewById(R.id.getUserPassword);
-
-                        String username = getName.getText().toString();
-                        String email = getEmail.getText().toString();
-                        String password = getPassword.getText().toString();
-
-                        // Checks for a sufficient password length
-                        if (password.length() > 5 && username.length() > 1) {
-                            registerUser(username, email, password);
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(), "Password requires a " +
-                                    "a minimum of 6 characters", Toast.LENGTH_SHORT).show();
-                        }
+                        checkUserInput();
                     }
                     catch (Exception e){
                         Toast.makeText(getApplicationContext(),
@@ -103,6 +82,28 @@ public class ActivityRegister extends AppCompatActivity {
     }
 
     /**
+     * Fetches the user's input and checks whether or not the provided password is sufficient.
+     */
+    public void checkUserInput() {
+        EditText getName = findViewById(R.id.getUsername);
+        EditText getEmail = findViewById(R.id.getUserEmail);
+        EditText getPassword = findViewById(R.id.getUserPassword);
+
+        String username = getName.getText().toString();
+        String email = getEmail.getText().toString();
+        String password = getPassword.getText().toString();
+
+        // Checks for a sufficient password length
+        if (password.length() > 5 && username.length() > 1) {
+            registerUser(username, email, password);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Password requires a " +
+                    "a minimum of 6 characters", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
      * Handles user registration.
      */
     public void registerUser(final String username, final String email, final String password){
@@ -113,10 +114,8 @@ public class ActivityRegister extends AppCompatActivity {
 
                         // If signing in is a success, update UI with the user's information
                         if (task.isSuccessful()) {
-                            FirebaseUser currentUser = mAuth.getCurrentUser();
-                            String id = currentUser.getUid();
-                            createUser(username, email, id);
-                            updateUI(currentUser);
+                            createUser(username, email, mAuth.getCurrentUser().getUid());
+                            updateUI(mAuth.getCurrentUser());
                         } else {
                             Toast.makeText(ActivityRegister.this,
                                     "This email is already in use", Toast.LENGTH_SHORT).show();

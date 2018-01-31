@@ -17,6 +17,8 @@ import java.util.Comparator;
  * in which the information of all users will be displayed.
  */
 public class MyAdapter extends ArrayAdapter<ClassLeaderboard> {
+    ClassLeaderboard item;
+    String str;
 
     public MyAdapter(Context context, ArrayList<ClassLeaderboard> items) {
         super(context, 0, items);
@@ -28,22 +30,31 @@ public class MyAdapter extends ArrayAdapter<ClassLeaderboard> {
     @Override
     public View getView(int position, View view, ViewGroup group) {
         // Get the track's class at the current position
-        ClassLeaderboard item = getItem(position);
+        item = getItem(position);
 
         // Initialize the leaderboard layout and the appropriate views
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.score_layout, group, false);
 
+        // The user's rank is equivalent to the position in the leaderboard
+        int currentPosition = position + 1;
+        str = "" + currentPosition;
+
+        handleAdapterViews(view);
+
+        return view;
+    }
+
+    /**
+     * Finds all appropriate TextViews and fills them in for each item in the adapter.
+     */
+    public void handleAdapterViews(View view) {
         TextView rankView  = view.findViewById(R.id.rankView);
         TextView nameView  = view.findViewById(R.id.nameView);
         TextView dateView  = view.findViewById(R.id.dateView);
         TextView timeView  = view.findViewById(R.id.timeView);
         TextView speedView = view.findViewById(R.id.speedView);
-
-        // The user's rank is equivalent to the position in the leaderboard
-        int currentPosition = position + 1;
-        String str = "" + currentPosition;
 
         // Set all TextViews within the leaderboard list
         rankView.setText(str);
@@ -51,7 +62,5 @@ public class MyAdapter extends ArrayAdapter<ClassLeaderboard> {
         dateView.setText(item.getDate().toString());
         timeView.setText(item.getTime());
         speedView.setText(item.getSpeed());
-
-        return view;
     }
 }

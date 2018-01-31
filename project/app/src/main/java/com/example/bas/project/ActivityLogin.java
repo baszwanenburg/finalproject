@@ -33,31 +33,25 @@ public class ActivityLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setToolBar();
 
         mAuth = FirebaseAuth.getInstance();
-
-        // Set up home button (back to Main Activity)
-        Toolbar myChildToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(myChildToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
 
         // Set up button listeners for logging in and the register screen
         Button login = findViewById(R.id.loginButton);
         Button register = findViewById(R.id.goToRegister);
         login.setOnClickListener(new Click());
         register.setOnClickListener(new Click());
+    }
 
-        // No user should be signed in on the login screen
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                if (currentUser != null) {
-                    mAuth.signOut();
-                }
-            }
-        };
+    /**
+     * Displays the toolbar with a home button that redirects the user to the Home Activity.
+     */
+    public void setToolBar() {
+        Toolbar myChildToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myChildToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -95,16 +89,14 @@ public class ActivityLogin extends AppCompatActivity {
      * Handles user login.
      */
     public void loginUser(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // If the login was succesful, update the UI
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(ActivityLogin.this,
                                     "Succesfully logged in", Toast.LENGTH_SHORT).show();
-                            updateUI(user);
+                            updateUI(mAuth.getCurrentUser());
                         } else {
                             Toast.makeText(ActivityLogin.this, "The email or password "
                                     + "is incorrect", Toast.LENGTH_SHORT).show();

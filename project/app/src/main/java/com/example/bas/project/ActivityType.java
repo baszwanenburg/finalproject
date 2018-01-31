@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -57,7 +58,7 @@ public class ActivityType extends AppCompatActivity {
     private String userid;
     private ClassMovie movieData = new ClassMovie();
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
-    int Seconds, Minutes, MilliSeconds, seconds_total;
+    int Seconds, Minutes, MilliSeconds, seconds_total, score, highScore;
     int currentMistakeCount = 0;
     int mistakeCount = 0;
     int wordCount = 0;
@@ -69,10 +70,11 @@ public class ActivityType extends AppCompatActivity {
     TextView textView, timerView, speedView;
     EditText editText;
     String moviePlot, movieOverview, movieTitle, movieYear, movieReview, movieImage, movieView,
-            userInput, yourTime, yourSpeed;
+            userInput, yourTime, yourSpeed, scoreString, highScoreString, username;
     String[] movieWords;
     Handler handler;
     Handler handlerPB = new Handler();
+    RoundCornerProgressBar progress1, progress2, progress3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,19 +91,13 @@ public class ActivityType extends AppCompatActivity {
         userInput = editText.getText().toString();
 
         Button resultsButton = findViewById(R.id.resultsButton);
-        resultsButton.setVisibility(View.VISIBLE);
 
         // Use TMdb API to get a movie description at random and set it to the textview
-        String url;
-        url = "https://api.themoviedb.org/3/movie/upcoming?api_key=f69b981254eabef0d0d10dde159b9981";
+        String url = "https://api.themoviedb.org/3/movie/upcoming?api_key=f69b981254eabef0d0d10dde159b9981";
         getJSON(url);
 
-        // Implement a timer
-        handler = new Handler();
-        StartTime = SystemClock.uptimeMillis();
-        handler.postDelayed(runnable, 0);
-
-        // Add a TextWatcher to compare user input to the movie description in the TextView
+        // Implement timer and add a TextWatcher to compare strings
+        implementTimer();
         addTextWatcher();
     }
 
@@ -176,36 +172,20 @@ public class ActivityType extends AppCompatActivity {
         });
     }
 
+    /**
+     * This will handle the second progress bar, that
+     * visualizes the performance of the user's best game.
+     */
     public void setPersonalBestBar(final String movieTitle) {
+        progress2 = findViewById(R.id.progress_2);
+
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("Scores");
         DatabaseReference mref  = dbref.child(movieTitle);
 
         mref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(userid).exists()) {
-                    final RoundCornerProgressBar progress2 = findViewById(R.id.progress_2);
-
-                    String timerPB = dataSnapshot.child(userid).child("time").getValue().toString();
-                    String[] minuteTime = timerPB.split(":");
-                    String[] secondsMillis = minuteTime[1].split("\\.");
-
-                    int minutes = Integer.parseInt(minuteTime[0]);
-                    int seconds = Integer.parseInt(secondsMillis[0]);
-                    int millis  = Integer.parseInt(secondsMillis[1]);
-                    final int duration2 = 6000 * minutes + 100 * seconds + millis;
-
-                    handlerPB.postDelayed(new Runnable(){
-                        public void run(){
-                            counter += 10;
-
-                            progress = (float)counter / (float)duration2;
-                            Log.d("test8", "" + progress);
-                            progress2.setProgress(progress);
-                            handler.postDelayed(this, delay);
-                        }
-                    }, delay);
-                }
+                getPbStats(dataSnapshot);
             }
 
             @Override
@@ -215,8 +195,33 @@ public class ActivityType extends AppCompatActivity {
         });
     }
 
+    public void getPbStats(DataSnapshot dataSnapshot) {
+        if (dataSnapshot.child(userid).exists()) {
+            String timerPB = dataSnapshot.child(userid).child("time").getValue().toString();
+            String[] minuteTime = timerPB.split(":");
+            String[] secondsMillis = minuteTime[1].split("\\.");
+
+            int minutes = Integer.parseInt(minuteTime[0]);
+            int seconds = Integer.parseInt(secondsMillis[0]);
+            int millis  = Integer.parseInt(secondsMillis[1]);
+            final int duration2 = 6000 * minutes + 100 * seconds + millis;
+
+            handlerPB.postDelayed(new Runnable(){
+                public void run(){
+                    counter += 10;
+                    progress2.setProgress((float)counter / (float)duration2);
+                    handler.postDelayed(this, delay);
+                }
+            }, delay);
+        }
+    }
+
+    /**
+     * This will handle the thirs progress bar, that visualizes the
+     * performance of the registered player with the highest score.
+     */
     public void setHighScoreBar(final String movieTitle) {
-        final RoundCornerProgressBar progress3 = findViewById(R.id.progress_3);
+        progress3 = findViewById(R.id.progress_3);
 
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
         Query qref = dbref.child("Scores").child(movieTitle).orderByChild("score").limitToFirst(1);
@@ -224,36 +229,7 @@ public class ActivityType extends AppCompatActivity {
         qref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                // Look for the data with the highest score
-                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                    String Key = childSnapshot.getKey();
-
-                    TextView highScoreView = findViewById(R.id.player3);
-                    String bestName = dataSnapshot.child(Key).child("username").getValue().toString();
-                    highScoreView.setText("High score (" + bestName + ")");
-
-                    // Fetch the time and turn it into seconds (for progress bar purposes)
-                    String timerPB = dataSnapshot.child(Key).child("time").getValue().toString();
-                    String[] minuteTime = timerPB.split(":");
-                    String[] secondsMillis = minuteTime[1].split("\\.");
-
-                    int minutes = Integer.parseInt(minuteTime[0]);
-                    int seconds = Integer.parseInt(secondsMillis[0]);
-                    int millis  = Integer.parseInt(secondsMillis[1]);
-                    final int duration3 = 6000 * minutes + 100 * seconds + millis;
-
-                    // Set the high score progress bar
-                    handlerPB.postDelayed(new Runnable(){
-                        public void run(){
-                            counter += 1;
-
-                            progress = (float)counter / (float)duration3;
-                            progress3.setProgress(progress);
-                            handler.postDelayed(this, delay);
-                        }
-                    }, delay);
-                }
+                getHighScoreStats(dataSnapshot);
             }
 
             @Override
@@ -263,25 +239,52 @@ public class ActivityType extends AppCompatActivity {
         });
     }
 
+    public void getHighScoreStats(DataSnapshot dataSnapshot) {
+        // Look for the data with the highest score
+        for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+            String Key = childSnapshot.getKey();
+
+            TextView highScoreView = findViewById(R.id.player3);
+            String bestName = dataSnapshot.child(Key).child("username").getValue().toString();
+            highScoreView.setText("High score (" + bestName + ")");
+
+            // Fetch the time and turn it into seconds (for progress bar purposes)
+            String timerPB = dataSnapshot.child(Key).child("time").getValue().toString();
+            String[] minuteTime = timerPB.split(":");
+            String[] secondsMillis = minuteTime[1].split("\\.");
+
+            int minutes = Integer.parseInt(minuteTime[0]);
+            int seconds = Integer.parseInt(secondsMillis[0]);
+            int millis  = Integer.parseInt(secondsMillis[1]);
+            final int duration3 = 6000 * minutes + 100 * seconds + millis;
+
+            // Set the high score progress bar
+            handlerPB.postDelayed(new Runnable(){
+                public void run(){
+                    counter += 1;
+                    progress3.setProgress((float)counter / (float)duration3;);
+                    handler.postDelayed(this, delay);
+                }
+            }, delay);
+        }
+    }
+
     /**
      * Implements and sets a timer and uses it to calculate the current number of words per minute.
      */
+    public void implementTimer() {
+        handler = new Handler();
+        StartTime = SystemClock.uptimeMillis();
+        handler.postDelayed(runnable, 0);
+    }
+
     public Runnable runnable = new Runnable() {
         public void run() {
         MillisecondTime = SystemClock.uptimeMillis() - StartTime;
         UpdateTime = TimeBuff + MillisecondTime;
         seconds_total = (int) (UpdateTime / 1000);
 
-        // Parses the system clock into minutes, seconds and milliseconds
-        Minutes = seconds_total / 60;
-        Seconds = seconds_total % 60;
-        MilliSeconds = (int) (UpdateTime % 1000) / 10;
-
-        // Use the MM:SS.mm format
-        timerView = findViewById(R.id.timer);
-        timerView.setText(Minutes + ":"
-                + String.format("%02d", Seconds) + "."
-                + String.format("%02d", MilliSeconds));
+        setTimerView();
 
         handler.postDelayed(this, 0);
 
@@ -295,10 +298,26 @@ public class ActivityType extends AppCompatActivity {
     };
 
     /**
+     * This will transform the lapsed time into a MM:ss:mm format.
+     */
+    public void setTimerView() {
+        // Parses the system clock into minutes, seconds and milliseconds
+        Minutes = seconds_total / 60;
+        Seconds = seconds_total % 60;
+        MilliSeconds = (int) (UpdateTime % 1000) / 10;
+
+        // Use the MM:SS.mm format
+        timerView = findViewById(R.id.timer);
+        timerView.setText(Minutes + ":"
+                + String.format("%02d", Seconds) + "."
+                + String.format("%02d", MilliSeconds));
+    }
+
+    /**
      * Visualizes user's performance by adjusting the progress and mistake counter.
      */
     public void setProgressValues() {
-        RoundCornerProgressBar progress1 = findViewById(R.id.progress_1);
+        progress1 = findViewById(R.id.progress_1);
 
         // The progress is a float and calculated with the amount of characters correctly typed
         progress = (float)typeProgress / (float)movieView.length();
@@ -376,7 +395,6 @@ public class ActivityType extends AppCompatActivity {
 
         // Only handle the scores if the user is logged in
         if (user != null) {
-            userid = user.getUid();
             updateLeaderBoard();
         } else {
             Toast.makeText(ActivityType.this,
@@ -401,38 +419,8 @@ public class ActivityType extends AppCompatActivity {
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Extract numbers from the timer (this will be the user's score) and get username
-                String timer = timerView.getText().toString();
-                String scoreString = timer.replaceAll("\\D+","");
-                String username = dataSnapshot.child("User")
-                        .child(userid).child("username").getValue().toString();
-
-                // If there's no highscore yet, set it to 1000 minutes, otherwise fetch it from FB
-                String highScoreString = "10000000";
-                if (dataSnapshot.child("Scores")
-                        .child(movieTitle).child(userid).child("score").exists()) {
-                    highScoreString = dataSnapshot.child("Scores")
-                            .child(movieTitle).child(userid).child("score").getValue().toString();
-                }
-
-                // Transforms scores from string into integers
-                int score = Integer.parseInt(scoreString);
-                int highScore = Integer.parseInt(highScoreString);
-
-                // If the user got a new high score, update the leaderboard in Firebase
-                if (score < highScore) {
-                    DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("Scores");
-                    DatabaseReference mref = dbref.child(movieTitle).child(userid);
-
-                    String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm")
-                            .format(Calendar.getInstance().getTime());
-
-                    mref.child("username").setValue(username);
-                    mref.child("date").setValue(timeStamp);
-                    mref.child("time").setValue(yourTime);
-                    mref.child("score").setValue(score);
-                    mref.child("speed").setValue(yourSpeed);
-                }
+                processUserPerformance(dataSnapshot);
+                compareStats(username);
             }
 
             @Override
@@ -440,5 +428,48 @@ public class ActivityType extends AppCompatActivity {
                 Log.d("getData() error", "Database or connectivity error");
             }
         });
+    }
+
+    /**
+     * Looks into the current stats and Firebase data of the user.
+     */
+    public void processUserPerformance(DataSnapshot dataSnapshot) {
+        // Extract numbers from the timer (this will be the user's score) and get username
+        String timer = timerView.getText().toString();
+        scoreString = timer.replaceAll("\\D+","");
+        username = dataSnapshot.child("User")
+                .child(userid).child("username").getValue().toString();
+
+        // If there's no highscore yet, set it to 1000 minutes, otherwise fetch it from FB
+        highScoreString = "10000000";
+        if (dataSnapshot.child("Scores").child(movieTitle).child(userid).child("score").exists()) {
+            highScoreString = dataSnapshot.child("Scores")
+                    .child(movieTitle).child(userid).child("score").getValue().toString();
+        }
+    }
+
+    /**
+     * If the user manages to perform better than the last time, this will update the leaderboard.
+     */
+    public void compareStats(String username) {
+        // Transforms scores from string into integers
+        int score = Integer.parseInt(scoreString);
+        int highScore = Integer.parseInt(highScoreString);
+
+        // Do this only when the user performed better (lower time = lower score)
+        if (score < highScore) {
+            DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("Scores");
+            DatabaseReference mref = dbref.child(movieTitle).child(userid);
+
+            // Get the current time
+            String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm")
+                    .format(Calendar.getInstance().getTime());
+
+            mref.child("username").setValue(username);
+            mref.child("date").setValue(timeStamp);
+            mref.child("time").setValue(yourTime);
+            mref.child("score").setValue(score);
+            mref.child("speed").setValue(yourSpeed);
+        }
     }
 }
