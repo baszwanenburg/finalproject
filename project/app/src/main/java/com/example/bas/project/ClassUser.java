@@ -1,14 +1,9 @@
 package com.example.bas.project;
 
-/**
- * Created by Bas on 11-1-2018.
- */
-
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
- * Contains the user information
+ * This class contains the user's information, and is used for Firebase authentication.
  */
 public class ClassUser implements Serializable {
     public String id;

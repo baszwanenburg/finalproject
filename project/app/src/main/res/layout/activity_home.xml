@@ -59,7 +59,7 @@
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:text="Currently logged in  as...."
+            android:text="Currently logged in."
             android:textSize="12sp"/>
     </RelativeLayout>
 </LinearLayout>

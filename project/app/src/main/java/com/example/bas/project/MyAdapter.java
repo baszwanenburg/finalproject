@@ -2,27 +2,15 @@ package com.example.bas.project;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * This adapter allows for the use of a customized listview,
@@ -42,7 +30,9 @@ public class MyAdapter extends ArrayAdapter<ClassLeaderboard> {
         // Get the track's class at the current position
         ClassLeaderboard item = getItem(position);
 
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        // Initialize the leaderboard layout and the appropriate views
+        LayoutInflater inflater = (LayoutInflater) getContext()
+                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.score_layout, group, false);
 
         TextView rankView  = view.findViewById(R.id.rankView);
@@ -51,9 +41,11 @@ public class MyAdapter extends ArrayAdapter<ClassLeaderboard> {
         TextView timeView  = view.findViewById(R.id.timeView);
         TextView speedView = view.findViewById(R.id.speedView);
 
+        // The user's rank is equivalent to the position in the leaderboard
         int currentPosition = position + 1;
         String str = "" + currentPosition;
 
+        // Set all TextViews within the leaderboard list
         rankView.setText(str);
         nameView.setText(item.getUsername());
         dateView.setText(item.getDate().toString());

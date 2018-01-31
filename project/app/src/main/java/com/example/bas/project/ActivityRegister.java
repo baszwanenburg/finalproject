@@ -19,8 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
-
 /**
  * This activity allows the user to register.
  * Their account will be saved in Firebase.
@@ -71,6 +69,7 @@ public class ActivityRegister extends AppCompatActivity {
         @Override
         public void onClick(View view){
             switch (view.getId()){
+                // In case of registration, checks if the user's input is correct
                 case R.id.registerButton:
                     try{
                         EditText getName = findViewById(R.id.getUsername);
@@ -81,12 +80,13 @@ public class ActivityRegister extends AppCompatActivity {
                         String email = getEmail.getText().toString();
                         String password = getPassword.getText().toString();
 
+                        // Checks for a sufficient password length
                         if (password.length() > 5 && username.length() > 1) {
                             registerUser(username, email, password);
                         }
                         else{
                             Toast.makeText(getApplicationContext(), "Password requires a " +
-                                    "a minimum length of 6 characters", Toast.LENGTH_SHORT).show();
+                                    "a minimum of 6 characters", Toast.LENGTH_SHORT).show();
                         }
                     }
                     catch (Exception e){
@@ -110,8 +110,9 @@ public class ActivityRegister extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        // If signing in is a success, update UI with the user's information
                         if (task.isSuccessful()) {
-                            // If signing in is a success, update UI with the user's information
                             FirebaseUser currentUser = mAuth.getCurrentUser();
                             String id = currentUser.getUid();
                             createUser(username, email, id);
@@ -146,6 +147,8 @@ public class ActivityRegister extends AppCompatActivity {
      * Updates the user interface based on whether or not a user is logged in.
      */
     public void updateUI(FirebaseUser currentUser) {
+
+        // If a user is detected, it means the registration was succesful, otherwise it failed
         if (currentUser != null) {
             Toast.makeText(getApplicationContext(),
                     "Successfully registered", Toast.LENGTH_SHORT).show();

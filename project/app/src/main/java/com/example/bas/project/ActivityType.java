@@ -1,10 +1,5 @@
 package com.example.bas.project;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
@@ -13,17 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spannable;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,65 +40,86 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Random;
 
 import static java.lang.Math.round;
 
+/**
+ * This activity handles the entire game. It uses TheMovieDB API to get one of the select view
+ * movie descriptions at random, and uses a TextWatcher to compare it to the user's input. Also
+ * implements a timer, keeps track of the user's progress and updates Firebase accordingly.
+ */
 public class ActivityType extends AppCompatActivity {
 
-    TextView textView, timerView, speedView;
-    EditText editText;
-    String movieView, movieOverview, userInput;
-    String movieTitle, movieYear, movieReview, movieImage;
-    String yourTime, yourSpeed;
-    String[] movieWords;
-    Handler handler, handler2;
+    private FirebaseUser user;
+    private String userid;
+    private ClassMovie movieData = new ClassMovie();
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
     int Seconds, Minutes, MilliSeconds, seconds_total;
     int currentMistakeCount = 0;
     int mistakeCount = 0;
     int wordCount = 0;
     int typeProgress = 0;
-    float progress;
-    float wpm = 0;
-    private FirebaseUser user;
-    private String userid;
-    private ClassMovie movieData = new ClassMovie();
-    Handler handlerPB = new Handler();
     int delay = 100;
     int counter = 0;
+    float progress;
+    float wpm = 0;
+    TextView textView, timerView, speedView;
+    EditText editText;
+    String moviePlot, movieOverview, movieTitle, movieYear, movieReview, movieImage, movieView,
+            userInput, yourTime, yourSpeed;
+    String[] movieWords;
+    Handler handler;
+    Handler handlerPB = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        userid = user.getUid();
+
+        if (user != null) {
+            userid = user.getUid();
+        }
 
         textView = findViewById(R.id.movieDescription);
         editText = findViewById(R.id.userInput);
         userInput = editText.getText().toString();
 
-        // use tmdb API to get a random movie description and set it to the textview
-        String url = "https://api.themoviedb.org/3/movie/popular?api_key=f69b981254eabef0d0d10dde159b9981";
+        Button resultsButton = findViewById(R.id.resultsButton);
+        resultsButton.setVisibility(View.VISIBLE);
+
+        // Use TMdb API to get a movie description at random and set it to the textview
+        String url;
+        url = "https://api.themoviedb.org/3/movie/upcoming?api_key=f69b981254eabef0d0d10dde159b9981";
         getJSON(url);
 
+        // Implement a timer
         handler = new Handler();
         StartTime = SystemClock.uptimeMillis();
         handler.postDelayed(runnable, 0);
 
+        // Add a TextWatcher to compare user input to the movie description in the TextView
         addTextWatcher();
     }
 
+    /**
+     * This TextWatcher will keep track of the user input.
+     */
     public void addTextWatcher() {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable mEdit) {
+                /*
+                The TextView needs to be split into seperate words in order
+                to keep track of the correctly typed words per minute.
+                 */
                 movieView = textView.getText().toString();
                 movieWords = movieView.split(" ");
 
-                // update view when all typed text is fully correct
+                // Update the view when all typed text is fully correct
                 if (mEdit.toString().equals(movieView)) {
                     Button resultsButton = findViewById(R.id.resultsButton);
                     resultsButton.setVisibility(View.VISIBLE);
@@ -117,7 +129,7 @@ public class ActivityType extends AppCompatActivity {
                     handler.removeCallbacks(runnable);
                 }
 
-
+                // Counts the correct words within the user's input
                 String[] typedWords = mEdit.toString().split(" ");
                 wordCount = 0;
                 for (int i = 0; i < typedWords.length; i++) {
@@ -126,24 +138,30 @@ public class ActivityType extends AppCompatActivity {
                     }
                 }
 
-                // compare every character of the TextView and EditText
+                // Compare every character of the TextView and EditText
                 if (0 < mEdit.length() && mEdit.length() <= textView.length()) {
                     textView.setText(movieView, TextView.BufferType.SPANNABLE);
                     Spannable s = (Spannable) textView.getText();
 
                     currentMistakeCount = 0;
                     typeProgress = 0;
+
+                    // Adds visualization to the TextView and keeps track of the user's progress
                     for (int i = 0; i < mEdit.length(); i++) {
                         int start = i;
                         int end = i + 1;
 
+                        // Characters that are typed correctly will be colored green, otherwise red
                         if (mEdit.charAt(i) == movieView.charAt(i)) {
                             typeProgress += 1;
 
-                            s.setSpan(new ForegroundColorSpan(0xFF66FF66), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            s.setSpan(new ForegroundColorSpan(0xFF66FF66),
+                                    start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         } else {
-                            s.setSpan(new ForegroundColorSpan(0xFFFF6666), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            s.setSpan(new BackgroundColorSpan(0xFF660000), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            s.setSpan(new ForegroundColorSpan(0xFFFF6666),
+                                    start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            s.setSpan(new BackgroundColorSpan(0xFF660000),
+                                    start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                             currentMistakeCount += 1;
                         }
@@ -158,11 +176,9 @@ public class ActivityType extends AppCompatActivity {
         });
     }
 
-    public void setProgressBar2(final String movieTitle) {
+    public void setPersonalBestBar(final String movieTitle) {
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("Scores");
         DatabaseReference mref  = dbref.child(movieTitle);
-
-        Log.d("test12345", "" + userid);
 
         mref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -199,7 +215,7 @@ public class ActivityType extends AppCompatActivity {
         });
     }
 
-    public void setProgressBar3(final String movieTitle) {
+    public void setHighScoreBar(final String movieTitle) {
         final RoundCornerProgressBar progress3 = findViewById(R.id.progress_3);
 
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
@@ -209,6 +225,7 @@ public class ActivityType extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                // Look for the data with the highest score
                 for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                     String Key = childSnapshot.getKey();
 
@@ -216,6 +233,7 @@ public class ActivityType extends AppCompatActivity {
                     String bestName = dataSnapshot.child(Key).child("username").getValue().toString();
                     highScoreView.setText("High score (" + bestName + ")");
 
+                    // Fetch the time and turn it into seconds (for progress bar purposes)
                     String timerPB = dataSnapshot.child(Key).child("time").getValue().toString();
                     String[] minuteTime = timerPB.split(":");
                     String[] secondsMillis = minuteTime[1].split("\\.");
@@ -225,6 +243,7 @@ public class ActivityType extends AppCompatActivity {
                     int millis  = Integer.parseInt(secondsMillis[1]);
                     final int duration3 = 6000 * minutes + 100 * seconds + millis;
 
+                    // Set the high score progress bar
                     handlerPB.postDelayed(new Runnable(){
                         public void run(){
                             counter += 1;
@@ -249,26 +268,29 @@ public class ActivityType extends AppCompatActivity {
      */
     public Runnable runnable = new Runnable() {
         public void run() {
-            MillisecondTime = SystemClock.uptimeMillis() - StartTime;
-            UpdateTime = TimeBuff + MillisecondTime;
-            seconds_total = (int) (UpdateTime / 1000);
+        MillisecondTime = SystemClock.uptimeMillis() - StartTime;
+        UpdateTime = TimeBuff + MillisecondTime;
+        seconds_total = (int) (UpdateTime / 1000);
 
-            Minutes = seconds_total / 60;
-            Seconds = seconds_total % 60;
-            MilliSeconds = (int) (UpdateTime % 1000) / 10;
+        // Parses the system clock into minutes, seconds and milliseconds
+        Minutes = seconds_total / 60;
+        Seconds = seconds_total % 60;
+        MilliSeconds = (int) (UpdateTime % 1000) / 10;
 
-            timerView = findViewById(R.id.timer);
-            timerView.setText(Minutes + ":"
-                    + String.format("%02d", Seconds) + "."
-                    + String.format("%02d", MilliSeconds));
+        // Use the MM:SS.mm format
+        timerView = findViewById(R.id.timer);
+        timerView.setText(Minutes + ":"
+                + String.format("%02d", Seconds) + "."
+                + String.format("%02d", MilliSeconds));
 
-            handler.postDelayed(this, 0);
+        handler.postDelayed(this, 0);
 
-            if (seconds_total > 0) {
-                wpm = ((float)wordCount / (float)seconds_total) * 60;
-                speedView = findViewById(R.id.wpm_1);
-                speedView.setText(round(wpm) + " WPM");
-            }
+        // Use the timer to calculate the words per minute number
+        if (seconds_total > 0) {
+            wpm = ((float)wordCount / (float)seconds_total) * 60;
+            speedView = findViewById(R.id.wpm_1);
+            speedView.setText(round(wpm) + " WPM");
+        }
         }
     };
 
@@ -278,6 +300,7 @@ public class ActivityType extends AppCompatActivity {
     public void setProgressValues() {
         RoundCornerProgressBar progress1 = findViewById(R.id.progress_1);
 
+        // The progress is a float and calculated with the amount of characters correctly typed
         progress = (float)typeProgress / (float)movieView.length();
         progress1.setProgress(progress);
 
@@ -293,40 +316,43 @@ public class ActivityType extends AppCompatActivity {
      * Fetches JSON from the web and parses it.
      */
     public void getJSON(String url) {
-        Log.d("test123: ", "test");
         RequestQueue RQ = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.d("test123: ", "test");
-                            // create a new JSONObject and push the data into it
+                            // Create a new JSONObject and push the data into it
                             JSONObject object = new JSONObject(response);
                             JSONArray arr = object.getJSONArray("results");
 
-                            /*
-                            // read the JSON object at a random index
+                            /* Read the JSON object at a random index
                             Random random = new Random();
-                            int i = random.nextInt(20);
-                            JSONObject obj = arr.getJSONObject(i);*/
+                            int i = random.nextInt(20);*/
+                            JSONObject obj = arr.getJSONObject(8);
 
-                            JSONObject obj = arr.getJSONObject(3);
-
-                            // add new instance of ClassMovie
+                            // Add new instance of ClassMovie
                             String id = obj.getString("id");
-                            movieImage = "https://image.tmdb.org/t/p/w640" + obj.getString("poster_path");
+                            movieImage = "https://image.tmdb.org/t/p/w300_and_h450_bestv2/"
+                                    + obj.getString("poster_path");
                             movieTitle = obj.getString("title");
                             movieYear = obj.getString("release_date").substring(0,4);
-                            movieOverview = obj.getString("overview");
+                            moviePlot = obj.getString("overview");
                             movieReview = obj.getString("vote_average");
 
-                            movieData = new ClassMovie(id, movieImage, movieTitle, movieOverview, movieYear, movieReview);
-                            movieOverview = movieData.getOverview();
+                            // Replace all direction dependent apostrophes
+                            String moviePlot1 = moviePlot.replaceAll("“", "\"");
+                            String moviePlot2 = moviePlot1.replaceAll("”", "\"");
+                            String moviePlot3 = moviePlot2.replaceAll("‘", "\'");
+                            String movieOverview = moviePlot3.replaceAll("’", "\'");
+
+                            movieData = new ClassMovie(id, movieImage, movieTitle, movieOverview,
+                                    movieYear, movieReview);
                             textView.setText(movieOverview);
 
-                            setProgressBar2(movieTitle);
-                            setProgressBar3(movieTitle);
+                            // Handles the other progress bars
+                            setPersonalBestBar(movieTitle);
+                            setHighScoreBar(movieTitle);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -348,6 +374,7 @@ public class ActivityType extends AppCompatActivity {
         yourTime  = timerView.getText().toString();
         yourSpeed = speedView.getText().toString();
 
+        // Only handle the scores if the user is logged in
         if (user != null) {
             userid = user.getUid();
             updateLeaderBoard();
@@ -356,6 +383,7 @@ public class ActivityType extends AppCompatActivity {
                     "Scores of guests will not be saved", Toast.LENGTH_SHORT).show();
         }
 
+        // Use intents to pass relevant information to the results screen
         Intent intent = new Intent(this, ActivityResults.class);
         intent.putExtra("time", yourTime);
         intent.putExtra("speed", yourSpeed);
@@ -364,7 +392,7 @@ public class ActivityType extends AppCompatActivity {
     }
 
     /**
-     * In case of obtaining a high score, his will save the user's score for
+     * In case of obtaining a high score, this will save the user's score for
      * the appropriate movie description in Firebase for leaderboard purposes.
      */
     public void updateLeaderBoard() {
@@ -373,26 +401,34 @@ public class ActivityType extends AppCompatActivity {
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Look through Firebase and find the requested information
+                // Extract numbers from the timer (this will be the user's score) and get username
                 String timer = timerView.getText().toString();
                 String scoreString = timer.replaceAll("\\D+","");
+                String username = dataSnapshot.child("User")
+                        .child(userid).child("username").getValue().toString();
+
+                // If there's no highscore yet, set it to 1000 minutes, otherwise fetch it from FB
                 String highScoreString = "10000000";
-
-                String username = dataSnapshot.child("User").child(userid).child("username").getValue().toString();
-
-                if (dataSnapshot.child("Scores").child(movieTitle).child(userid).child("score").exists()) {
-                    highScoreString = dataSnapshot.child("Scores").child(movieTitle).child(userid).child("score").getValue().toString();
+                if (dataSnapshot.child("Scores")
+                        .child(movieTitle).child(userid).child("score").exists()) {
+                    highScoreString = dataSnapshot.child("Scores")
+                            .child(movieTitle).child(userid).child("score").getValue().toString();
                 }
 
+                // Transforms scores from string into integers
                 int score = Integer.parseInt(scoreString);
                 int highScore = Integer.parseInt(highScoreString);
 
+                // If the user got a new high score, update the leaderboard in Firebase
                 if (score < highScore) {
                     DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("Scores");
                     DatabaseReference mref = dbref.child(movieTitle).child(userid);
 
+                    String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm")
+                            .format(Calendar.getInstance().getTime());
+
                     mref.child("username").setValue(username);
-                    mref.child("date").setValue(ServerValue.TIMESTAMP);
+                    mref.child("date").setValue(timeStamp);
                     mref.child("time").setValue(yourTime);
                     mref.child("score").setValue(score);
                     mref.child("speed").setValue(yourSpeed);

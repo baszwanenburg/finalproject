@@ -1,42 +1,37 @@
 package com.example.bas.project;
 
-/**
- * Created by Bas on 11-1-2018.
- */
-
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
- * Contains the user information
+ * Contains the data to be stored in the leaderboards.
  */
 public class ClassLeaderboard implements Serializable {
     public String username;
-    public String highscore;
-    public Long date;
+    public String date;
     public String time;
     public String speed;
+    int score;
 
     // Default constructor for Firebase
     public ClassLeaderboard() {}
 
-    public ClassLeaderboard(String username, String highscore, Long date, String time, String speed) {
-        this.username  = username;
-        this.highscore = highscore;
-        this.date      = date;
-        this.time      = time;
-        this.speed     = speed;
+    public ClassLeaderboard(String username, int score, String date, String time, String speed) {
+        this.username = username;
+        this.score    = score;
+        this.date     = date;
+        this.time     = time;
+        this.speed    = speed;
     }
 
     String getUsername() {
         return username;
     }
 
-    String getScore() {
-        return highscore;
+    int getScore() {
+        return score;
     }
 
-    Long getDate() {
+    String getDate() {
         return date;
     }
 

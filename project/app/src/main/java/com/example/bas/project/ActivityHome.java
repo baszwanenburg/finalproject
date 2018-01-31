@@ -17,9 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 /**
- * Main screen, allows the user to go to the
- * Login screen (if not logged in already) or
- * play the game (either logged in or as a guest).
+ * Main screen, allows the user to go to the Login screen (if not logged in already)
+ * or play the game (either logged in or as a guest).
  */
 public class ActivityHome extends AppCompatActivity {
 
@@ -34,19 +33,20 @@ public class ActivityHome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         user = FirebaseAuth.getInstance().getCurrentUser();
-        currentUserText = findViewById(R.id.currentUserText);
 
+        currentUserText = findViewById(R.id.currentUserText);
         Button login = findViewById(R.id.loginButton);
         Button logout = findViewById(R.id.logoutButton);
         Button database = findViewById(R.id.playButton);
 
+        // If no user is logged in, show the login button
         if (user == null) {
             logout.setVisibility(View.GONE);
             login.setVisibility(View.VISIBLE);
 
             currentUserText.setText("You are not logged in.");
+        // If a user is detected, hide the login button and display the logout button. Show username
         } else {
             logout.setVisibility(View.VISIBLE);
             login.setVisibility(View.GONE);
@@ -56,6 +56,7 @@ public class ActivityHome extends AppCompatActivity {
             FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
             DatabaseReference dbref = fbdb.getReference("User/" + userid);
 
+            /*
             dbref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -68,8 +69,10 @@ public class ActivityHome extends AppCompatActivity {
                     throw databaseError.toException();
                 }
             });
+            */
         }
 
+        // Set all button listeners
         login.setOnClickListener(new Click());
         logout.setOnClickListener(new Click());
         database.setOnClickListener(new Click());
@@ -83,15 +86,18 @@ public class ActivityHome extends AppCompatActivity {
             switch (view.getId()) {
                 // Go to the fragment activity, regardless of whether or not someone is logged in
                 case R.id.playButton:
-                    goToMyDatabase();
+                    goToMyGame();
                     break;
 
+                // Log out user and navigate to the login screen
                 case R.id.logoutButton:
                     FirebaseAuth.getInstance().signOut();
+                    finish();
                     goToLoginScreen();
 
                     Toast.makeText(getApplicationContext(), "Successfully logged out",
                             Toast.LENGTH_SHORT).show();
+                    finish();
                     break;
 
                 // Go to the login screen activity
@@ -108,11 +114,17 @@ public class ActivityHome extends AppCompatActivity {
         }
     }
 
-    public void goToMyDatabase() {
+    /**
+     * Starts the game.
+     */
+    public void goToMyGame() {
         Intent intent = new Intent(this, ActivityType.class);
         startActivity(intent);
     }
 
+    /**
+     * Navigates user to the login screen.
+     */
     public void goToLoginScreen() {
         Intent intent = new Intent(this, ActivityLogin.class);
         startActivity(intent);

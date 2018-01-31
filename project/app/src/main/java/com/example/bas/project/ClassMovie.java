@@ -3,7 +3,7 @@ package com.example.bas.project;
 import java.io.Serializable;
 
 /**
- * Created by Bas on 11-1-2018.
+ * Groups all relevant movie information together.
  */
 public class ClassMovie implements Serializable {
     private String id;
@@ -13,7 +13,8 @@ public class ClassMovie implements Serializable {
     private String year;
     private String review;
 
-    public ClassMovie(String id, String image, String title, String overview, String year, String review) {
+    public ClassMovie(String id, String image, String title, String overview, String year,
+                      String review) {
         this.id       = id;
         this.image    = image;
         this.title    = title;

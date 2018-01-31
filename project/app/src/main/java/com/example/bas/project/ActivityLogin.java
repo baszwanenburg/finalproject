@@ -99,19 +99,23 @@ public class ActivityLogin extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If the login was succesful, update the UI
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(ActivityLogin.this,
                                     "Succesfully logged in", Toast.LENGTH_SHORT).show();
                             updateUI(user);
                         } else {
-                            Toast.makeText(ActivityLogin.this,
-                                    "The email or password is incorrect", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityLogin.this, "The email or password "
+                                    + "is incorrect", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
+    /**
+     * Makes sure no one is logged in on the login screen.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -119,7 +123,8 @@ public class ActivityLogin extends AppCompatActivity {
 
         // Send the user to the fragment activity if already logged in
         if (currentUser != null) {
-            Toast.makeText(ActivityLogin.this, "Already logged in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivityLogin.this, "Already logged in",
+                    Toast.LENGTH_SHORT).show();
             updateUI(currentUser);
         }
     }
@@ -142,7 +147,7 @@ public class ActivityLogin extends AppCompatActivity {
             finish();
         } else {
             Toast.makeText(getApplicationContext(),
-                    "Inloggen mislukt", Toast.LENGTH_SHORT).show();
+                    "Login failed", Toast.LENGTH_SHORT).show();
         }
     }
 }

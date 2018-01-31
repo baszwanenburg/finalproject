@@ -16,12 +16,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
+/**
+ * Displays the user stats from the game that just finished, and shows the high score of every user
+ * that typed the appropriate movie description in a leaderboard listview.
+ */
 public class ActivityResults extends AppCompatActivity {
 
     private FirebaseUser user;
@@ -35,8 +40,12 @@ public class ActivityResults extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        userid = user.getUid();
 
+        if (user != null) {
+            userid = user.getUid();
+        }
+
+        // Get the data from the previous activity and display it
         Intent intent = getIntent();
         ClassMovie movieData = (ClassMovie)getIntent().getSerializableExtra("movieClass");
 
@@ -44,8 +53,7 @@ public class ActivityResults extends AppCompatActivity {
         setStatViews(intent);
         getData(movieData.getMovieTitle());
 
-        Log.d("test0: ", movieData.getMovieTitle());
-
+        // Display the toolbar with a home button
         Toolbar myChildToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myChildToolbar);
         ActionBar ab = getSupportActionBar();
@@ -90,51 +98,25 @@ public class ActivityResults extends AppCompatActivity {
 
         timeView.setText("Your time: " + yourTime);
         speedView.setText("Your speed: " + yourSpeed);
-
     }
 
     /**
-     * Retrieves Firebase data
+     * Retrieves Firebase data needed to set up the leaderboard
      */
     public void getData(String movieTitle) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         DatabaseReference dbref = fbdb.getReference("Scores").child(movieTitle);
-        //Query qref = dbref.orderByChild("score").limitToFirst(10);
 
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Look through Firebase and find the requested information
-                Log.d("test1: ", "dayo");
 
-                Log.d("test3 ", ""+ dataSnapshot.getChildrenCount());
+                // Look through Firebase and find the scores from the appropriate movie description
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     ClassLeaderboard post = postSnapshot.getValue(ClassLeaderboard.class);
                     items.add(post);
-
-                    Log.d("test2: ", post.getTime() + "");
                 }
 
-                /*
-                for (DataSnapshot shot: dataSnapshot.getChildren()) {
-
-                    //ClassLeaderboard stats = shot.getValue(ClassLeaderboard.class);
-
-                    String username  = shot.child("username").getValue().toString();
-                    String highscore = shot.child("score").getValue().toString();
-                    String date      = shot.child("date").getValue().toString();
-                    String time      = shot.child("time").getValue().toString();
-                    String speed     = shot.child("speed").getValue().toString();
-
-                    // Create new instance of the user class and and it to the database
-                    ClassLeaderboard stats = new ClassLeaderboard(username, highscore, date, time, speed);
-
-                    Log.d("test2: ", "dayo");
-                    Log.d("stats: ", stats.getScore() + "?");
-
-                    items.add(stats);
-                }
-                */
                 loadLeaderboard(items);
             }
 
@@ -147,13 +129,18 @@ public class ActivityResults extends AppCompatActivity {
 
 
     /**
-     * Displays the 10 highest scores from the user database into a listview.
+     * Displays the users with their scores from the user database into a listview.
      */
     public void loadLeaderboard(ArrayList<ClassLeaderboard> items) {
         MyAdapter adapter;
         adapter = new MyAdapter(this, items);
-
-        Log.d("test3: ", "dayo");
+        adapter.sort(new Comparator<ClassLeaderboard>() {
+            @Override
+            public int compare(ClassLeaderboard object1, ClassLeaderboard object2) {
+                return ((Integer) object1.getScore()).compareTo(object2.getScore());
+            }
+        });
+        adapter.notifyDataSetChanged();
 
         ListView listView = findViewById(R.id.leaderboardListView);
         listView.setAdapter(adapter);
