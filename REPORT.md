@@ -4,6 +4,7 @@ Bas Zwanenburg
 
 ## Korte beschrijving
 De app implementeert een typspelletje, waarbij de speler zo snel mogelijk een stuk tekst dient over te typen. Dit stukje tekst vormt de plot van een recente of aankomende film, en de film waarbij deze beschrijving hoort wordt na alles correct over te typen onthult. Indien de speler is ingelogd, wordt de beste prestatie voor elk stukje tekst opgeslagen in een leaderboard met behulp van Firebase.
+
 ![Screenshot](/docs/SingleScreenshot.png)
 
 ## Technische design
