@@ -14,6 +14,7 @@ Het nut van de app is dat de gebruiker door de competitie op een leuke en uitdag
 ![Screenshots](/docs/appScreenshots.png)
 
 ## Product Video
+https://vimeo.com/253942479
 
 ## Better Code Hub
 [![BCH compliance](https://bettercodehub.com/edge/badge/baszwanenburg/finalproject?branch=master)](https://bettercodehub.com/)
